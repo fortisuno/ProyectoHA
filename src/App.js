@@ -5,7 +5,6 @@ export default function App() {
   return (
     <div>
       <Title />
-      <span>jejeje</span>
     </div>
   )
 }
