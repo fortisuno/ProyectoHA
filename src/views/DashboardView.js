@@ -55,7 +55,7 @@ export default function DashboardView({history}) {
                   </div>
                 </div>
               </div>
-              <button className="btn btn-danger mt-5">Salir</button>
+              <button className="btn btn-danger mt-5" onClick={ handleLogout }>Salir</button>
             </div>
           </div>
         </div>
