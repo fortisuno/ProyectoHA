@@ -66,7 +66,7 @@ function LoginView({history, session}) {
       <form onSubmit={ handleAuth } className="card border-0 shadow" style={{width: '350px', borderRadius: '20px'}}>
         <div className="card-body">
           <div className="d-flex flex-column align-items-center py-4 ">
-            <img src="/logoPrincipal.png" className="d-block rounded-circle mb-5" style={{width: '128px'}} alt="logo"/>
+            <img src="/logoPrincipal.png" className="d-block mb-4" style={{width: '200px'}} alt="logo"/>
             <input type="email" className="form-control form-control-lg text-center" id="email" placeholder="correo@dominio.com" style={{borderRadius: '10px 10px 0 0'}} />
             <input type={showPassword ? 'text' : 'password'} className="form-control form-control-lg text-center" id="password" placeholder="Contraseña" style={{borderRadius: '0 0 10px 10px'}} />
             <div className="form-check form-switch mt-3" style={{userSelect: 'none'}}>
@@ -76,7 +76,7 @@ function LoginView({history, session}) {
             <div className="alert alert-danger text-center mt-3 mb-4 d-none" style={{borderRadius: '10px'}} id="feedback" role="alert">
               Por favor introduce un usuario y contraseña valido
             </div>
-            <button type="submit" className="btn btn-primary btn-lg d-block w-100 mt-5" style={{borderRadius: '10px'}}>Iniciar sesión</button>
+            <button type="submit" className="btn btn-primary btn-lg d-block w-100" style={{borderRadius: '10px', marginTop: '5rem'}}>Iniciar sesión</button>
           </div>
         </div>
       </form>

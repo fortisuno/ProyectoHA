@@ -9,6 +9,7 @@ function DashboardView({history, session}) {
   const [tareas, setTareas] = useState([]);
   
   useEffect(() => {
+    console.log(tareas);
     if(!auth.currentUser) {
       console.log('no hay usuario');
       history.replace('/login')
@@ -29,7 +30,7 @@ function DashboardView({history, session}) {
     }
   }, [])
 
-  const agregarTarea = useCallback(async () => {
+  const agregarTarea = async () => {
     const materia = document.querySelector('#materia');
     const fechaEntrega = document.querySelector('#fecha-entrega');
     const descripcion = document.querySelector('#descripcion');
@@ -42,25 +43,28 @@ function DashboardView({history, session}) {
       const data = await db.collection(session.uid).add(nuevaTarea)
       setTareas([...tareas, {id: data.id, ...nuevaTarea}])
 
+      materia.value = '';
+      fechaEntrega.value = '';
+      descripcion.value = '';
     } catch (error) {
       console.log(error);
     }
-  }, [])
+  }
 
-  const eliminarTarea = useCallback(async (id) => {
+  const eliminarTarea = async (id) => {
     try {
-      await db.collection('Pendientes').doc(id).delete();
+      await db.collection(session.uid).doc(id).delete();
       const nuevoArray = tareas.filter(tarea => tarea.id !== id)
       setTareas(nuevoArray)
 
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  };
 
-  const editarTarea = useCallback(async (id, materia, fechaEntrega, descripcion) => {
+  const editarTarea = async (id, materia, fechaEntrega, descripcion) => {
     try {
-      await db.collection('Pendientes').doc(id).update({
+      await db.collection(session.uid).doc(id).update({
         materia: materia,
         fechaEntrega: fechaEntrega,
         descripcion: descripcion
@@ -73,7 +77,7 @@ function DashboardView({history, session}) {
     } catch (error) {
       console.log(error);
     }
-  })
+  }
 
   const handleAgregarTarea = (e) => {
     e.preventDefault()
@@ -103,11 +107,7 @@ function DashboardView({history, session}) {
       materia.classList.remove('is-invalid');
       descripcion.classList.remove('is-invalid');
       fechaEntrega.classList.remove('is-invalid');
-      
-      materia.value = ''
-      descripcion.value = ''
-      fechaEntrega.value = ''
-      
+            
       agregarTarea()
     }
     
@@ -125,30 +125,29 @@ function DashboardView({history, session}) {
       <div className="container">
         <div className="row min-vh-100 w-100 py-5 align-items-start">          
           <div className="col">
-            {
-              tareas.length > 0 ? (
                 <ResponsiveMasonry>
                   <Masonry gutter="24px">
-                    { tareas.map((tarea) => (
-                      <div key={tarea.id}>
-                        <Pendiente
-                          id={tarea.id}
-                          materia={tarea.materia}
-                          fechaEntrega={tarea.fechaEntrega}
-                          descripcion={tarea.descripcion}
-                          eliminar={ eliminarTarea }
-                          editar={ editarTarea } />
-                      </div>
-                    )) }
+                    {
+                      tareas.map((tarea) => (
+                        <div key={tarea.id}>
+                          <Pendiente
+                            id={tarea.id}
+                            materia={tarea.materia}
+                            fechaEntrega={tarea.fechaEntrega}
+                            descripcion={tarea.descripcion}
+                            eliminar={ eliminarTarea }
+                            editar={ editarTarea } />
+                        </div>
+                      ))
+                    }
                   </Masonry>
                 </ResponsiveMasonry>
-              ) : <h2 className="text-center">No hay tareas por hacer</h2>
-            }
           </div>
           <div className="col-md-3" style={{maxHeight: '100vh'}}>
             <div className="d-grid gap-4">
               <div className="card shadow-sm">
                 <div className="card-body">
+                  <img src="/logoPag.png" className="d-block w-50 mx-auto mb-3" alt=""/>
                   <h5 className="text-center">¡Bienvenido de nuevo!</h5>
                 </div>
               </div>
