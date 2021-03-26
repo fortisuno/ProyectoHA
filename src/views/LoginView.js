@@ -76,7 +76,7 @@ function LoginView({history, session}) {
             <div className="alert alert-danger text-center mt-3 mb-4 d-none" style={{borderRadius: '10px'}} id="feedback" role="alert">
               Por favor introduce un usuario y contraseña valido
             </div>
-            <button type="submit" className="btn btn-primary btn-lg d-block w-100" style={{borderRadius: '10px', marginTop: '5rem'}}>Iniciar sesión</button>
+            <button type="submit" className="btn btn-primary btn-lg d-block w-100 text-white" style={{borderRadius: '10px', marginTop: '5rem'}}>Iniciar sesión</button>
           </div>
         </div>
       </form>

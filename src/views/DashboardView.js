@@ -125,7 +125,7 @@ function DashboardView({history, session}) {
       <div className="container">
         <div className="row min-vh-100 w-100 py-5 align-items-start">          
           <div className="col">
-                <ResponsiveMasonry>
+                <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 1200: 3}}>
                   <Masonry gutter="24px">
                     {
                       tareas.map((tarea) => (
@@ -143,7 +143,7 @@ function DashboardView({history, session}) {
                   </Masonry>
                 </ResponsiveMasonry>
           </div>
-          <div className="col-md-3" style={{maxHeight: '100vh'}}>
+          <div className="col-md-4 col-lg-3" style={{maxHeight: '100vh'}}>
             <div className="d-grid gap-4">
               <div className="card shadow-sm">
                 <div className="card-body">
@@ -164,10 +164,10 @@ function DashboardView({history, session}) {
                   <div className="mb-3">
                     <textarea className="form-control" rows="3" id="descripcion" placeholder="Detalles de la tarea..."></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary d-block w-100">Agregar pendiente</button>
+                  <button type="submit" className="btn btn-primary d-block w-100 text-white">Agregar pendiente</button>
                 </div>
               </form>
-              <button className="btn btn-danger mt-5" onClick={ handleLogout }>Salir</button>
+              <button className="btn btn-secondary mt-5" onClick={ handleLogout }>Salir</button>
             </div>
           </div>
         </div>
