@@ -5,7 +5,7 @@ export default function App() {
   return (
     <>
       <AppRouter />
-      <span className="badge bg-dark position-fixed bottom-0 end-0 m-3">v0.1</span>
+      <span className="badge bg-dark position-fixed bottom-0 end-0 m-3">v0.2</span>
     </>
   )
 }

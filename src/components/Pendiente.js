@@ -1,15 +1,23 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-export default function Pendiente({descripcion, materia, fechaEntrega, id, eliminar, editar}) {
+const obtenerMateria = (id, array) => {
+  const materia = array.filter(m => m.id === id )
+  return materia[0].nombre
+}
+
+export default function Pendiente(props) {
+  const {id, editar, eliminar, materias, active} = props;
+
+  const [materiaId, setMateriaId] = useState(props.materiaId)
+  const [materiaNombre, setMateriaNombre] = useState(() => obtenerMateria(materiaId, materias))
+  const [fechaEntrega, setFechaEntrega] = useState(props.fechaEntrega)
+  const [descripcion, setDescripcion] = useState(props.descripcion)
 
   const [editable, setEditable] = useState(false)
-  const [desc, setDesc] = useState(descripcion)
-  const [mat, setMat] = useState(materia)
-  const [fecha, setFecha] = useState(fechaEntrega)
-
+  
   const nuevaMateria = useRef()
-  const nuevaFecha = useRef()
-  const nuevaDescripcion = useRef()
+  const nuevaFechaEntrega = useRef()
+  const nuevaDescripcion = useRef()  
 
   const handleEliminarTarea = () => {
     eliminar(id)
@@ -17,27 +25,43 @@ export default function Pendiente({descripcion, materia, fechaEntrega, id, elimi
 
   const handleEditarTarea = () => {
     const m = nuevaMateria.current.value
-    const f = nuevaFecha.current.value
+    const f = nuevaFechaEntrega.current.value
     const d = nuevaDescripcion.current.value
     
-    setMat(m)
-    setFecha(f)
-    setDesc(d)
+    setMateriaId(m)
+    setMateriaNombre(() => obtenerMateria(m, materias))
+    setFechaEntrega(f)
+    setDescripcion(d)
     setEditable(false)
+
+    const newData = {
+      materiaId: m,
+      fechaEntrega: f,
+      descripcion: d,
+      active: active
+    }
     
-    editar(id, m, f, d)
+    editar(id, newData)
   }
 
   return (
     <div className="card shadow-sm overflow-hidden" style={{background: '#ffe97f'}}>
       <div className="card-header border-0">
         <div className="d-flex justify-content-between align-items-center">
-          {editable ? <input ref={nuevaMateria} type="text" className="form-control form-control-sm" defaultValue={mat}/> : <h5 className="mb-0 d-block text-truncate">{mat}</h5>}
-          {editable ? <input ref={nuevaFecha} type="text" className="form-control form-control-sm ms-2" defaultValue={fecha}/> : <span className="fw-bold">{fecha}</span>}
+          {editable ? (
+            <select ref={nuevaMateria} className="form-select form-select-sm" aria-label="Default select example" id="materia" defaultValue={materiaId}>
+              {
+                materias.map(ua => (
+                  <option value={ua.id} key={ua.id}>{ua.nombre}</option>
+                ))
+              }
+            </select>
+          ) : <h5 className="mb-0 d-block text-truncate">{materiaNombre}</h5>}
+          {editable ? <input ref={nuevaFechaEntrega} type="text" className="form-control form-control-sm ms-2" defaultValue={fechaEntrega}/> : <span className="fw-bold">{fechaEntrega}</span>}
         </div>
       </div>
       <div className="card-body py-4">
-        {editable ? <textarea ref={nuevaDescripcion} className="form-control form-control-sm" id="" rows="3" defaultValue={desc}></textarea> : <p className="lead">{desc}</p>}
+        {editable ? <textarea ref={nuevaDescripcion} className="form-control form-control-sm" id="" rows="3" defaultValue={descripcion}></textarea> : <p className="lead">{descripcion}</p>}
       </div>
       <div className="card-footer border-0 bg-transparent">
         <div className="d-flex justify-content-end align-items-center">
