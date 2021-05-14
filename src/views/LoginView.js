@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useCallback, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
-import {auth} from '../utils/firesbase'
+import {auth} from '../utils/firesbase';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import NuevoUsuario from '../components/NuevoUsuario';
+
+const Modal = withReactContent(Swal)
 
 function LoginView({history, session}) {
 
@@ -8,10 +15,9 @@ function LoginView({history, session}) {
 
   useEffect(() => {
     if(auth.currentUser) {
-      console.log('hay un usuario');
       history.replace('/dashboard')
     } else {
-      console.log('no hay usuario');
+      // console.log('no hay usuario');
     }
   }, [])
 
@@ -57,6 +63,16 @@ function LoginView({history, session}) {
     }
   }, [])
 
+const handleModal = () => {
+  Modal.fire({
+    html: <NuevoUsuario router={history}/>,
+    customClass: {
+      popup: 'card-rounded'
+    },
+    showConfirmButton: false
+  })
+}
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword)
   }
@@ -66,17 +82,18 @@ function LoginView({history, session}) {
       <form onSubmit={ handleAuth } className="card border-0 shadow" style={{width: '350px', borderRadius: '20px'}}>
         <div className="card-body">
           <div className="d-flex flex-column align-items-center py-4 ">
-            <img src="/logoPrincipal.png" className="d-block mb-4" style={{width: '200px'}} alt="logo"/>
+            <img src="/logoPrincipal.png" className="d-block mb-5" style={{width: '200px'}} alt="logo"/>
             <input type="email" className="form-control form-control-lg text-center" id="email" placeholder="correo@dominio.com" style={{borderRadius: '10px 10px 0 0'}} />
             <input type={showPassword ? 'text' : 'password'} className="form-control form-control-lg text-center" id="password" placeholder="Contraseña" style={{borderRadius: '0 0 10px 10px'}} />
-            <div className="form-check form-switch mt-3" style={{userSelect: 'none'}}>
+            <div className="form-check form-switch my-3" style={{userSelect: 'none'}}>
               <input className="form-check-input" type="checkbox" id="password-flag" defaultChecked={ showPassword } onClick={ handleShowPassword } />
               <label className="form-check-label" htmlFor="password-flag">Mostrar contraseña</label>
             </div>
-            <div className="alert alert-danger text-center mt-3 mb-4 d-none" style={{borderRadius: '10px'}} id="feedback" role="alert">
+            <div className="alert alert-danger text-center d-none" style={{borderRadius: '10px'}} id="feedback" role="alert">
               Por favor introduce un usuario y contraseña valido
             </div>
-            <button type="submit" className="btn btn-primary btn-lg d-block w-100 text-white" style={{borderRadius: '10px', marginTop: '5rem'}}>Iniciar sesión</button>
+            <button type="submit" className="btn btn-primary btn-lg mt-5 d-block w-100 text-white" style={{borderRadius: '10px'}}>Iniciar sesión</button>
+            <a role="button" className="btn btn-link mt-2 d-block w-100" style={{borderRadius: '10px'}} onClick={handleModal}>Crear cuenta</a>
           </div>
         </div>
       </form>

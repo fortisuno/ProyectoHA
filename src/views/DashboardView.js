@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react'
 import Pendiente from '../components/Pendiente'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
@@ -7,12 +8,13 @@ import { withRouter } from 'react-router';
 function DashboardView({history, session}) {
   const [unidadesAprendizaje, setUnidadesAprendizaje] = useState([]);
   const [tareas, setTareas] = useState([]);
+  const [info, setInfo] = useState({nombre: '', apellidos: '', email: ''});
   
   useEffect(() => {
     if(!auth.currentUser) {
-      console.log('no hay usuario');
       history.replace('/login')
     } else {
+      obtenerInfo()
       obtenerUnidadesAprendizaje().then(() => {
         obtenerTareas()
       })
@@ -38,6 +40,16 @@ function DashboardView({history, session}) {
       console.log(error);
     }
   }, [])
+
+  const obtenerInfo = async () => {
+    try {
+      const usuario = await db.collection("usuarios").doc(session.uid).get('data');
+      const data = usuario.data()
+      setInfo(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const agregarTarea = async (nuevaTarea) => {
     try {
@@ -182,7 +194,7 @@ function DashboardView({history, session}) {
   const agregarUnidadAprendizaje = async (nuevaUa) => {
     try {
       const data = await db.collection("usuarios").doc(session.uid).collection("materias").add(nuevaUa)
-      setUnidadesAprendizaje([...unidadesAprendizaje, {id: data.id, ...nuevaUa}])
+      setUnidadesAprendizaje([...unidadesAprendizaje, {id: data.id, active: true, ...nuevaUa}])
       
     } catch (error) {
       console.log(error);
@@ -259,9 +271,10 @@ function DashboardView({history, session}) {
           <div className="col-md-4 col-lg-3">
             <div className="d-grid gap-4">
               <div className="card shadow-sm">
-                <div className="card-body">
+                <div className="card-body text-center">
                   <img src="/logoPag.png" className="d-block w-50 mx-auto mb-3" alt=""/>
-                  <h5 className="text-center">¡Bienvenido de nuevo!</h5>
+                  <h5 className="">¡Bienvenido de nuevo!</h5>
+                  <span className="fs-5">{info.nombre + ' ' + info.apellidos}</span>
                 </div>
               </div>
               <form onSubmit={ handleAgregarTarea } className="card shadow-sm">
@@ -282,17 +295,17 @@ function DashboardView({history, session}) {
                     <input type="text" className="form-control" id="fecha-entrega" placeholder="Fecha de entrega"/>
                   </div>
                   <div className="mb-3">
-                    <textarea className="form-control" rows="3" id="descripcion" placeholder="Detalles de la tarea..."></textarea>
+                    <textarea className="form-control" rows="3" id="descripcion" placeholder="Detalles del pendiente..."></textarea>
                   </div>
                   <button type="submit" className="btn btn-primary d-block w-100 text-white">Agregar pendiente</button>
                 </div>
               </form>
               <form onSubmit={ handleAgregarUnidadAprendizaje } className="card shadow-sm">
                 <div className="card-body">
-                  <h5 className="car-title mb-0">Unidades de aprendizaje</h5>
+                  <h5 className="car-title mb-0">Materias</h5>
                   <hr className="mb-4 mt-2"/>
                   <div className="input-group mb-3">
-                    <input type="text" className="form-control" placeholder="Unidad de aprendizaje" id="input-uaAdd" aria-describedby="button-addon2" />
+                    <input type="text" className="form-control" placeholder="Nueva materia" id="input-uaAdd" aria-describedby="button-addon2" />
                     <button type="submit" className="btn btn-primary text-white" id="btn-uaAdd" style={{borderRadius: '0 5px 5px 0'}}>Agregar</button>
                   </div>
                   <div className="mt-4">

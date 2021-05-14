@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 const obtenerMateria = (id, array) => {
   const materia = array.filter(m => m.id === id )

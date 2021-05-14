@@ -18,6 +18,14 @@ $dark: #181818;
   border: none;
 }
 
+.form-control-rounded {
+  border-radius: 10px;
+}
+
+.card-rounded {
+  border-radius: 20px;
+}
+
 .form-check-input {
   &.active {
     background: $green;
